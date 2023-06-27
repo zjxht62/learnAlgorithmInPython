@@ -44,6 +44,36 @@ def parChecker(symbolString):
     else:
         return False
 
+# 通用括号匹配算法
+def parCheckerPlus(symbolString):
+    s = Stack()
+    balanced =  True
+    index = 0
+    while index < len(symbolString) and balanced:
+        symbol = symbolString[index]
+        # 碰到各种左括号依旧入栈
+        if symbol in "([{":
+            s.push(symbol)
+        else:
+            if s.isEmpty():
+                balanced = False
+            else:
+                # 碰到各种右括号的时候需要判断栈顶的左括号是否跟右括号是同一种类
+                par = s.pop()
+                if not isParMatch(par, symbol):
+                    balanced = False
+        index += 1
+
+    if balanced and s.isEmpty():
+        return True
+    else:
+        return False
+
+def isParMatch(par1, par2):
+    left_pars ="([{"
+    right_pars = ")]}"
+    return left_pars.index(par1) == right_pars.index(par2)
 
 if __name__ == '__main__':
-    print(myParChecker("(()()(())()"))
+    print(myParChecker("(()()(())())"))
+    print(parCheckerPlus("{()()([])()}}"))
