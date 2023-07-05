@@ -92,6 +92,7 @@ if __name__ == '__main__':
     ll.add(2)
     ll.add(3)
     ll.add(4)
+    ll.my_remove(5)
     print(ll.my_search(8))
     print(ll.my_search(1))
     print(ll.my_search(2))
