@@ -49,3 +49,43 @@ class OrderedList:
                     current = current.get_next()
         return found
 ```
+## 有序表实现：add方法
+### 相比无序表，改动最大的就是add方法，因为add方法必须保证加入的数据项添加到合适的位置，来维护整个链表的有序性。
+比如在(17,26,54,77,93)有序表中添加元素31，那么我们就需要沿着链表，找到第一个大于31的数据项，
+也就是54，将31插入到它前面
+![img_3.png](img_3.png)
+### 由于涉及到的插入位置是当前节点之前，而链表没有对前一个节点的引用
+### 所以，和remove方法类似，引入一个previous来记录上一个节点，current记录当前节点
+### 一旦找到了第一个比31大的数据项，previous就发挥作用了
+```python
+    def add(self, item):
+        current: Node = self.head
+        previous: Node = None
+        found_larger: bool = False
+        while current is not None and not found_larger:
+            if current.get_data() > item:
+                found_larger = True
+            else:
+                previous = current
+                current = current.get_next()
+        temp = Node(item)
+        if previous is None:
+            temp.set_next(current)
+            self.head = temp
+        else:
+            previous.set_next(temp)
+            temp.set_next(current)
+```
+## 链表实现有序表的算法分析
+### 对于链表复杂度的分析，主要是看对应的方法是否涉及到链表的遍历
+### 对于一个包含节点数为你的链表
+isEmpty()的时间复杂度是`O(1)`，因为只需要判断self.head是否为None即可
+
+size是`O(n)`，因为除了遍历到表尾，没有其它办法得知节点的数量
+
+search/remove以及有序表的add方法则是`O(n)`因为它们都需要遍历链表，但是按照概率来说，其平均操作次数为n/2
+
+而无序表的add方法则是`O(1)`，因为只需要往头结点插入即可，不涉及遍历
+
+### 链表实现的List，跟Python内置的列表数据类型，在有些相同方法的实现上的时间复杂度不同
+### 主要是因为Python内置的列表数据类型是基于顺序存储来实现的，并进行了部分优化
