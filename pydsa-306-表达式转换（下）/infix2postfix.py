@@ -1,6 +1,6 @@
 from pythonds.basic.stack import Stack
 
-OP_LATTERS='ABCDEFGHIJKLMNOPQRSTUVWXYZ'
+OP_LATTERS='ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789'
 
 def get_op_priority(op):
     prority_dict = {}
@@ -46,3 +46,4 @@ if __name__ == '__main__':
     print(infix2postfix("A + B * C"))
     print(infix2postfix("( A + B ) * C"))
     print(infix2postfix("( A + B ) * C - ( D - E ) * ( F + G )"))
+    print(infix2postfix("( 2 + 3 ) * 6 + 4 / 2"))
