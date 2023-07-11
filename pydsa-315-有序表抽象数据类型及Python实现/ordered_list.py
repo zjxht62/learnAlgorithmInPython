@@ -60,3 +60,28 @@ class OrderedList:
                     current = current.get_next()
         return found
 
+    def add(self, item):
+        current: Node = self.head
+        previous: Node = None
+        found_larger: bool = False
+        while current is not None and not found_larger:
+            if current.get_data() > item:
+                found_larger = True
+            else:
+                previous = current
+                current = current.get_next()
+        temp = Node(item)
+        if previous is None:
+            temp.set_next(current)
+            self.head = temp
+        else:
+            previous.set_next(temp)
+            temp.set_next(current)
+
+if __name__ == '__main__':
+    ol = OrderedList()
+    ol.add(17)
+    ol.add(26)
+    ol.add(54)
+    ol.add(77)
+    ol.add(93)
