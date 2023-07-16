@@ -43,6 +43,9 @@ class DoublyLinkedList():
             for i in it:
                 self.append(i)
 
+    def get_tail(self):
+        return self.tail
+
     def is_empty(self):
         return self.head is None
 
@@ -71,19 +74,52 @@ class DoublyLinkedList():
         self.length += 1
 
     def search(self, item):
-        pass
+        return self.index(item) is not None
 
     def size(self):
-        pass
+        return self.length
+
+    __len__ = size
+
+    def delete(self, current):
+        if self.head == current:
+            self.head = current.get_next()
+        if self.tail == current:
+            self.tail = current.get_prev()
+        if current.get_prev() is not None:
+            current.get_prev().set_next(current.get_next())
+        if current.get_next() is not None:
+            current.get_next().set_prev(current.get_prev())
+        self.length -= 1
 
     def remove(self, item):
-        pass
+        current = self.head
+        while current is not None:
+            if current.get_data() == item:
+                self.delete(current)
+                break
+            current = current.get_next()
 
     def index(self, item):
-        pass
+        current, index = self.head, 0
+        while current is not None:
+            if current.get_data() == item:
+                return index
+            else:
+                current = current.get_next()
+                index += 1
+        return None
 
-    def pop(self):
-        pass
+    def pop(self, n: int = None):
+        if n is None:
+            n = self.length - 1
+        current, i = self.head, 0
+        while i < n:
+            current = current.get_next()
+            i += 1
+        dat = current.get_data()
+        self.delete(current)
+        return dat
 
     def insert(self, idx, item):  # 加为idx个
         current, n = self.head, 0
@@ -105,13 +141,59 @@ class DoublyLinkedList():
             current.set_prev(node_insert)
         self.length += 1
 
+    def __str__(self):
+        tlist = []
+        current = self.head
+        while current is not None:
+            tlist.append(current.get_data())
+            current = current.get_next()
+        return str(tlist)
 
-    def __len__(self):
-        pass
+    __repr__ = __str__
 
-    def __getitem__(self, item):
-        pass
+    def __getitem__(self, key):
+        if isinstance(key, int):
+            current, index = self.head, 0
+            # 使用while循环和for都行，感觉for更好理解
+            while index < key:
+                current: Node = current.get_next()
+                index += 1
+            # for _ in range(key):
+            #     current = current.get_next()
+            #     index += 1
+            if current is not None:
+                return current.get_data()
+            else:
+                raise StopIteration
+        elif isinstance(key, slice):
+            start = 0 if key.start is None else key.start
+            stop = self.length if key.stop is None else key.stop
+            step = 1 if key.step is None else key.step
+            current, i = self.head, 0
+            # 定位到start
+            while i < start:
+                current = current.get_next()
+                i += 1
+            dcopy = DoublyLinkedList()
+            while i < stop:
+                dcopy.append(current.get_data())
+                s = step
+                while current is not None and s > 0:
+                    current = current.get_next()
+                    s -= 1
+                i += step
+            return dcopy
 
+    def __eq__(self, other):
+        if other is None or not isinstance(other, DoublyLinkedList):
+            return False
+        if len(self) != len(other):
+            return False
+        for s,o in zip(self, other):
+            if s!=o:
+                return False
+        else:
+            return True
     # 代码结束
 
 
@@ -120,10 +202,12 @@ print("======== 5-DoublyLinkedList ========")
 mylist = DoublyLinkedList()
 for i in range(0, 20, 2):
     mylist.append(i)
+print(mylist)
+print(mylist[4])
 mylist.add(3)
 mylist.remove(6)
-print(mylist.getTail().getPrev().getData())  # 16
-print(mylist.isEmpty())  # False
+print(mylist.get_tail().get_prev().get_data())  # 16
+print(mylist.is_empty())  # False
 print(mylist.search(5))  # False
 print(mylist.size())  # 10
 print(mylist.index(2))  # 2
