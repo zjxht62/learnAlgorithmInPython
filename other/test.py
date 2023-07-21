@@ -112,21 +112,55 @@ def print_linked_list(head:Node):
         print_linked_list(head.get_next())
 
 def remove_node(head:Node, val:int):
-    if head.get_next().get_data() == val:
-        head.set_next(head.get_next().get_next())
+    # 最小子问题
+    if head is None:
+        return None
+    # 除了头结点外，剩下的子链表删除指定元素后返回的头节点
+    ret = remove_node(head.get_next(), val)
+
+    # 如果头节点不需要删除，那么将其next设置为ret，返回head
+    if head.get_data() != val:
+        head.set_next(ret)
+        return head
+    # 否则，head的next设置为空，返回ret
     else:
-        return remove_node(head.get_next(), val)
+        head.set_next(None)
+        return ret
+
+def remove_node2(head:Node, val:int):
+    # 最小子问题
+    if head is None:
+        return None
+    # 如果头节点不用删除，那就设next为子问题返回的头结点，返回head
+    if head.get_data() != val:
+        head.set_next(remove_node2(head.get_next(), val))
+        return head
+    # 否则，直接返回子问题的头结点
+    else:
+        return remove_node2(head.get_next(), val)
+
+def reverse_linked_list(head:Node):
+    if head.get_next() is None or head is None:
+        return head
+    ret = reverse_linked_list(head.get_next())
+    head.get_next().set_next(head)
+    head.set_next(None)
+    return ret
+
+
+
+
 
 
 
 
 node1 = Node(1)
 node2 = Node(2)
-node3 = Node(6)
-node4 = Node(3)
-node5 = Node(4)
-node6 = Node(5)
-node7 = Node(6)
+node3 = Node(3)
+node4 = Node(4)
+node5 = Node(5)
+node6 = Node(6)
+node7 = Node(7)
 node1.set_next(node2)
 node2.set_next(node3)
 node3.set_next(node4)
@@ -135,7 +169,10 @@ node5.set_next(node6)
 node6.set_next(node7)
 
 
-print_linked_list(node1)
-remove_node(node1, 6)
-print(node1)
+# print_linked_list(node1)
+# remove_node2(node1, 6)
+# print_linked_list(node1)
+result = reverse_linked_list(node1)
+print_linked_list(result)
+# print(node1)
 
