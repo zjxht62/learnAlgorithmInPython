@@ -1,5 +1,6 @@
 l = [1, 2, 3, 4, 5]
 
+
 def print_item(list):
     if len(list) == 1:
         print(list[0])
@@ -7,11 +8,13 @@ def print_item(list):
         print(list[0])
         print_item(list[1:])
 
+
 def list_sum(list):
-    if len(list) ==1:
+    if len(list) == 1:
         return list[0]
     else:
         return list[0] + list_sum(list[1:])
+
 
 print_item(l)
 print(list_sum(l))
@@ -48,7 +51,7 @@ class UnorderedList:
         count = 0
         current = self.head
         while current is not None:
-            count +=1
+            count += 1
             current = current.get_next()
         return count
 
@@ -104,14 +107,15 @@ class UnorderedList:
             previous.set_next(current.get_next())
 
 
-def print_linked_list(head:Node):
+def print_linked_list(head: Node):
     if head.get_next() is None:
         print(head.get_data())
     else:
         print(head.get_data())
         print_linked_list(head.get_next())
 
-def remove_node(head:Node, val:int):
+
+def remove_node(head: Node, val: int):
     # 最小子问题
     if head is None:
         return None
@@ -127,7 +131,8 @@ def remove_node(head:Node, val:int):
         head.set_next(None)
         return ret
 
-def remove_node2(head:Node, val:int):
+
+def remove_node2(head: Node, val: int):
     # 最小子问题
     if head is None:
         return None
@@ -139,7 +144,8 @@ def remove_node2(head:Node, val:int):
     else:
         return remove_node2(head.get_next(), val)
 
-def reverse_linked_list(head:Node):
+
+def reverse_linked_list(head: Node):
     if head.get_next() is None or head is None:
         return head
     ret = reverse_linked_list(head.get_next())
@@ -148,10 +154,28 @@ def reverse_linked_list(head:Node):
     return ret
 
 
+class RemoveElement:
+    def __init__(self):
+        self.current = 0
 
+    def remove_from_head(self, head: Node, n: int):
+        self.current += 1
+        if self.current == n:
+            return head.get_next()
+        ret = self.remove_from_head(head.get_next(), n)
+        head.set_next(ret)
+        return head
 
+    def remove_from_end(self, head:Node, n:int):
 
+        ret = self.remove_from_head(head.get_next(), n)
+        head.set_next(ret)
 
+        self.current += 1
+        if self.current == n:
+            return head.get_next()
+
+        return head
 
 
 node1 = Node(1)
@@ -168,11 +192,16 @@ node4.set_next(node5)
 node5.set_next(node6)
 node6.set_next(node7)
 
-
 # print_linked_list(node1)
 # remove_node2(node1, 6)
 # print_linked_list(node1)
-result = reverse_linked_list(node1)
-print_linked_list(result)
+# result = reverse_linked_list(node1)
+# print_linked_list(result)
 # print(node1)
 
+remove_ele = RemoveElement()
+# result = remove_ele.remove_from_head(node1, 3)
+# print_linked_list(result)
+
+result = remove_ele.remove_from_end(node1, 3)
+print_linked_list(result)
