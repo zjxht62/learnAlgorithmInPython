@@ -17,6 +17,7 @@ class Permutation:
     def dfs(self, nums: list):
         # 当path长度等于nums时 结束
         if len(self.path) == len(nums):
+            self.used[i] = True
             self.all_path.append(list(self.path))
             return
 
@@ -25,7 +26,6 @@ class Permutation:
             if self.used[i]:
                 continue
             self.path.append(nums[i])
-            self.used[i] = True
             self.dfs(nums)
             self.path.pop()
             self.used[i] = False
