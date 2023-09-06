@@ -21,5 +21,27 @@ originalamount找零兑换问题具体来说就是：
 ![img_3.png](img_3.png)
 ## 找零兑换：动态规划代码
 ```python
+# 动态规划求解找零问题
+def doChangeInDP(coin_value_list, change, min_coins_list):
+    for cents in range(1, change + 1):
+        coin_count = cents
+        for c in [d for d in coin_value_list if d <= cents]:
+            if min_coins_list[cents - c] + 1 < coin_count:
+                coin_count = min_coins_list[cents - c] + 1
+        min_coins_list[cents] = coin_count
+
+    return min_coins_list[change]
+
+
+print(doChangeInDP([1, 5, 10, 25], 63, [0] * 64))
 
 ```
+## 找零兑换：动态规划算法扩展
++ 我们注意到动态规划算法的doChangeInDP其实并不是一个递归函数  
+虽然这个问题我们一开始是通过递归解决，但是最终我们找到了一个更高效更有条理的非递归解法
++ 动态规划中最主要的思想是  
+从**最简单**情况开始到达所需找零的循环  
+其每一步都**依靠以前的最优解**来得到本步骤的最优解，直到得到答案
++ 前面的算法已经得到了最少硬币的数量， 但没有返回硬币如何组合 
++ 扩展算法的思路很简单，只需要在生成最优解列表同时**跟踪记录**所选择的那个硬币币值即可 
++ 在得到最后的解后，减去选择的硬币币值 ，**回溯**到表格之前的部分找零，就能逐步得到每一步所选择的硬币币值

@@ -2,10 +2,10 @@
 def doChangeInDP(coin_value_list, change, min_coins_list):
     for i in range(1, change+1):
         return_coins = i
-        for c in [j for j in coin_value_list if j <= change]:
-            if min_coins_list[change-c] +1 < return_coins:
-                min_coins_list[change] = min_coins_list[change-c]+1
-        min_coins_list[change] = return_coins
+        for c in [j for j in coin_value_list if j <= i]:
+            if min_coins_list[i-c] +1 < return_coins:
+                return_coins = min_coins_list[i-c]+1
+        min_coins_list[i] = return_coins
 
     return min_coins_list[change]
 
