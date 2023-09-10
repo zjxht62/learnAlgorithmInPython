@@ -13,7 +13,7 @@ def tiling(ceramic_tile_list, N, memo):
 
 
 if __name__ == '__main__':
-    n = 5
+    n = 6
     print(tiling([1, 2, 3, 4], n, [0]*(n+1)))
 
 
