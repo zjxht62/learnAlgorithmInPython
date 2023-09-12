@@ -1,4 +1,3 @@
-
 # ========= 2 单词最小编辑距离问题 =========
 # 实现一个函数，给定两个单词，得出从源单词变到目标单词所需要的最小编辑距离，返回总得分与编辑操作过程
 # 可以进行的操作有：
@@ -16,31 +15,53 @@ def dpWordEdit(original, target, oplist):
     original_len = len(original)
     target_len = len(target)
     # 初始化dp表格
-    dp = [[0]*(target_len+1) for i in range(original_len+1)]
+    dp = [[0] * (target_len + 1) for i in range(original_len + 1)]
     # 子问题，dp[i][0]
-    for i in range(1,original_len+1):
-        dp[i][0] = i*oplist['delete']
+    for i in range(1, original_len + 1):
+        dp[i][0] = i * oplist['delete']
     # 子问题,dp[0][j]
-    for j in range(1, target_len+1):
-        dp[0][j] = j*oplist['insert']
-    for i in range(1, original_len+1):
-        for j in range(1, target_len +1):
+    for j in range(1, target_len + 1):
+        dp[0][j] = j * oplist['insert']
+    for i in range(1, original_len + 1):
+        for j in range(1, target_len + 1):
             # 如果original第i-1（因为i从1开始，i-1才能代表对应字符的下标）等于original第i-1，则不用编辑
-            if original[i-1] == target[j-1]:
-                dp[i][j] = dp[i-1][j-1] +oplist['copy']
+            if original[i - 1] == target[j - 1]:
+                dp[i][j] = dp[i - 1][j - 1] + oplist['copy']
                 operations.append(f'copy {target[j - 1]}')
 
             else:
-                delete_cost = dp[i-1][j]+oplist['delete']
-                insert_cost = dp[i][j-1]+oplist['insert']
-                if delete_cost > insert_cost:
-                    dp[i][j] = insert_cost
-                    operations.append(f'insert {target[j-1]}')
-                else:
-                    dp[i][j] = delete_cost
-                    operations.append(f'delete {original[i-1]}')
+                dp[i][j] = min(dp[i - 1][j] + oplist['delete'], dp[i][j - 1] + oplist['insert'])
+                # delete_cost = dp[i-1][j]+oplist['delete']
+                # insert_cost = dp[i][j-1]+oplist['insert']
+                # if delete_cost > insert_cost:
+                #     dp[i][j] = insert_cost
+                #     operations.append(f'insert {target[j-1]}')
+                # else:
+                #     dp[i][j] = delete_cost
+                #     operations.append(f'delete {original[i-1]}')
 
+    for l in dp:
+        print(l)
 
+    i = original_len
+    j = target_len
+    while i > 0 or j > 0:
+        if original[i - 1] == target[j - 1]:
+            operations.append(f'copy {target[j-1]}')
+            i -= 1
+            j -= 1
+            print(f'next:i,j is {i},{j}')
+        else:
+            if dp[i][j] - dp[i - 1][j] == oplist['delete']:
+                operations.append(f'delete {target[i - 1]}')
+                print(f'delete {target[i - 1]}')
+                i -= 1
+                print(f'next:i,j is {i},{j}')
+
+            elif dp[i][j] - dp[i][j - 1] == oplist['insert']:
+                operations.append(f'insert {target[j - 1]}')
+                j -= 1
+                print(f'next:i,j is {i},{j}')
 
     score = dp[original_len][target_len]
     # 代码结束
