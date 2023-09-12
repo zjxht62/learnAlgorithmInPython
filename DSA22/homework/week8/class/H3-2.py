@@ -28,10 +28,19 @@ def dpWordEdit(original, target, oplist):
             # 如果original第i-1（因为i从1开始，i-1才能代表对应字符的下标）等于original第i-1，则不用编辑
             if original[i-1] == target[j-1]:
                 dp[i][j] = dp[i-1][j-1] +oplist['copy']
+                operations.append(f'copy {target[j - 1]}')
 
             else:
+                delete_cost = dp[i-1][j]+oplist['delete']
+                insert_cost = dp[i][j-1]+oplist['insert']
+                if delete_cost > insert_cost:
+                    dp[i][j] = insert_cost
+                    operations.append(f'insert {target[j-1]}')
+                else:
+                    dp[i][j] = delete_cost
+                    operations.append(f'delete {original[i-1]}')
 
-                dp[i][j] = min(dp[i-1][j]+oplist['delete'],dp[i][j-1]+oplist['insert'])
+
 
     score = dp[original_len][target_len]
     # 代码结束
