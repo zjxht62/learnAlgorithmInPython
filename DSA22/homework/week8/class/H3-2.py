@@ -50,11 +50,11 @@ def dpWordEdit(original, target, oplist):
             operations.append(f'copy {target[j-1]}')
             i -= 1
             j -= 1
-            print(f'next:i,j is {i},{j}')
+            print(f'current:i,j is {i},{j}')
         else:
             if dp[i][j] - dp[i - 1][j] == oplist['delete']:
                 operations.append(f'delete {target[i - 1]}')
-                print(f'delete {target[i - 1]}')
+                print('delete')
                 i -= 1
                 print(f'next:i,j is {i},{j}')
 
