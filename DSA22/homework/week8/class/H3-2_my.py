@@ -12,49 +12,47 @@ def dpWordEdit(original, target, oplist):
     operations = []
 
     # 请在此编写你的代码（可删除pass语句）
-    # 初始化二维表格m[(i,j)]，均为0,None
-    # 表示源单词前i个字符子串，变为目标单词前j个字符子串，的最小编辑距离
-    # 以及最后进行了那个操作得到的这个最小编辑距离
-    m = {(i, j): [0, None] for i in range(len(original) + 1) for j in range(len(target) + 1)}
+    original_len = len(original)
+    target_len = len(target)
+    # 初始化dp表格
+    dp = [[0] * (target_len + 1) for i in range(original_len + 1)]
+    # 子问题，dp[i][0]
+    for i in range(1, original_len + 1):
+        dp[i][0] = i * oplist['delete']
+    # 子问题,dp[0][j]
+    for j in range(1, target_len + 1):
+        dp[0][j] = j * oplist['insert']
+    for i in range(1, original_len + 1):
+        for j in range(1, target_len + 1):
+            # 如果original第i-1（因为i从1开始，i-1才能代表对应字符的下标）等于original第i-1，则不用编辑
+            if original[i - 1] == target[j - 1]:
+                dp[i][j] = dp[i - 1][j - 1] + oplist['copy']
+            else:
+                dp[i][j] = min(dp[i - 1][j] + oplist['delete'], dp[i][j - 1] + oplist['insert'])
 
-    # 让字符的序号从1开始
-    original, target = '-' + original, '-' + target
+    for l in dp:
+        print(l)
 
-    # 设定首列m[i,0]，全delete
-    for i in range(1, len(original)):
-        m[i, 0] = [oplist['delete'] * i, 'delete ' + original[i]]
-
-    # 设定首行m[0,j]，全insert
-    for j in range(1, len(target)):
-        m[0, j] = [oplist['insert'] * j, 'insert ' + target[j]]
-
-    # 逐个填写二维表
-    for i in range(1, len(original)):
-        for j in range(1, len(target)):
-            ops = []  # 可能的操作和对应的分数
-            # copy操作，有条件
-            if original[i] == target[j]:
-                ops.append([m[i - 1, j - 1][0] + oplist['copy'], 'copy ' + original[i]])
-            # delete操作
-            ops.append([m[i - 1, j][0] + oplist['delete'], 'delete ' + original[i]])
-            # insert操作
-            ops.append([m[i, j - 1][0] + oplist['insert'], 'insert ' + target[j]])
-
-            # 取分数最小的
-            m[i, j] = min(ops, key=lambda x: x[0])
-
-    score = m[i, j][0]
+    i = original_len
+    j = target_len
     while i > 0 or j > 0:
-        op = m[i, j][1]
-        operations.insert(0, op)  # 倒序输出操作序列
-        if 'copy' in op:
-            i, j = i - 1, j - 1
-        elif 'delete' in op:
-            i = i - 1
-        elif 'insert' in op:
-            j = j - 1
-    pass
+        if original[i - 1] == target[j - 1]:
+            operations.insert(0, f'copy {target[j - 1]}')
+            i -= 1
+            j -= 1
+        else:
+            if dp[i][j] - dp[i - 1][j] == oplist['delete']:
+                operations.insert(0, f'delete {original[i - 1]}')
+                i -= 1
+
+            elif dp[i][j] - dp[i][j - 1] == oplist['insert']:
+                operations.insert(0, f'insert {target[j - 1]}')
+                j -= 1
+
+    score = dp[original_len][target_len]
     # 代码结束
+    # for l in dp:
+    #     print(l)
 
     return score, operations
 
