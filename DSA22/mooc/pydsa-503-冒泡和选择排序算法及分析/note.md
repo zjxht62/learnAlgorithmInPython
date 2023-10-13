@@ -76,3 +76,17 @@ print(alist)
 
 ![img_2.png](img_2.png)
 ## 选择排序：代码
+```python
+def selectionSort(alist):
+  # fillslot表示要放的位置的下标
+    for fillslot in range(len(alist)-1, 0, -1):
+        positionOfMax = 0
+        for location in range(1, fillslot+1):
+            if alist[location]>alist[positionOfMax]:
+                positionOfMax = location
+
+        temp = alist[fillslot]
+        alist[fillslot] = alist[positionOfMax]
+        alist[positionOfMax] = temp
+
+```
