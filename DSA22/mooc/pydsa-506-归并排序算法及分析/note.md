@@ -47,3 +47,39 @@ if __name__ == '__main__':
     print(alist)
 
 ```
+## 另一个归并排序代码（更Pythonic）
+```python
+# merge sort
+# 归并排序
+
+def merge_sort(lst):
+    # 递归结束条件
+    if len(lst) <= 1:
+        return lst
+
+    # 分解问题，并递归调用
+    middle = len(lst) // 2
+    left = merge_sort(lst[:middle])  # 左半部分排序
+    right = merge_sort(lst[middle:])  # 右半部分排序
+
+    # 合并左右半部分，完成排序
+    merged = []
+    while left and right:
+        if left[0] <= right[0]:
+            merged.append(left.pop(0))
+        else:
+            merged.append(right.pop(0))
+    merged.extend(right if right else left)
+    return merged
+
+```
+## 归并排序：算法分析
++ 将归并排序分为两个过程来分析：**分裂** 和 **归并**
++ 分裂的过程，借鉴二分查找中的分析结果，是对数复杂度，时间复杂度为O(logn)
++ 归并的过程，相对于分裂的每个部分，其所有数据项都会被比较和放置一次，所以是线性复杂度，其时间复杂度是O(n)
+  + 综合考虑，每次分裂的部分都进行一次O(n)的数据归并，总的时间复杂度是O(n*logn)
++ 最后，我们注意到还有两个切片操作
+  + 为了事件复杂度分析精确起见
+  + 可以通过**取消切片**操作，改为传递两个分裂部分的起始点和终止点，也是可以的，只是算法的可读性稍微牺牲一些。
++ 但是需要注意，归并排序使用了**额外1倍**的存储空间来用于归并
++ 这个特性在对特大数据集进行排序的时候要考虑进去
