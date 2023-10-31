@@ -41,8 +41,12 @@ def partition(alist, first, last):
     alist[rightmark] = temp
     # 返回中值点，也就是分裂点
     return rightmark
+#
+#
+# alist = [54, 26, 93, 17, 77, 31, 44, 55, 20]
+# quickSort(alist)
+# print(alist)
 
-
-alist = [54, 26, 93, 17, 77, 31, 44, 55, 20]
-quickSort(alist)
-print(alist)
+alist2 = [5,3,2,5,1]
+partition(alist2, 0, len(alist2)-1)
+print(alist2)

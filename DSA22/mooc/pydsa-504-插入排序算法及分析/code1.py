@@ -12,7 +12,8 @@ def insertionSort(alist):
 
 
 if __name__ == '__main__':
-    alist = [5,3,2,6,7,1,9]
+    # alist = [5,3,2,6,7,1,9]
+    alist = [1,2,3,4,5,6,7]
     insertionSort(alist)
     print(alist)
 
