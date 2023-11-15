@@ -23,3 +23,5 @@ def binary_search(versions, lambda_exp):
 
 if __name__ == '__main__':
     print(binary_search([1,2,3,4,6,7,8,9],4))
+
+
