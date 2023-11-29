@@ -8,7 +8,7 @@
 # 返回值：最大总价值maxValue，选取的宝物列表choosenList(格式同treasureList)
 def dpMuseumThief(treasureList, maxWeight):
     maxValue = 0
-    choosenList = []
+    chosenList = []
 
     # 请在此编写你的代码（可删除pass语句）
     tr = [None] + treasureList  # 让宝物编码从1开始
@@ -19,9 +19,11 @@ def dpMuseumThief(treasureList, maxWeight):
     m = {(i, w): [0, None] for i in range(len(tr)) for w in range(maxWeight + 1)}
     for i in range(1, len(tr)):
         for w in range(1, maxWeight + 1):
-            if tr[i]['w'] > w:
+            if tr[i]['w'] > w: # 装不下第i个宝物
                 m[i, w][0] = m[i - 1, w][0]
-            else:
+                m[i, w][1] = None # 不装宝物
+
+            else: # 不装第i个宝物，装第i个宝物，两种情况取最大价值
                 # 放入当前宝物后的价值
                 v_put = tr[i]['v'] + m[i - 1, w - tr[i]['w']][0]
                 # 不放入当前宝物时的价值
@@ -32,32 +34,20 @@ def dpMuseumThief(treasureList, maxWeight):
                     m[i, w][1] = tr[i]
                 else:
                     m[i, w][0] = v_not_put
+                    m[i, w][1] = None
+
 
     maxValue = m[i, w][0]
     while w > 0:
         if m[i, w][1] is not None:  # 如果装了宝物就输出
-            choosenList.insert(0, m[i, w][1])
+            chosenList.insert(0, m[i, w][1])
             # 重量减去当前宝物的重量
             w = w - m[i, w][1]['w']
         # 考虑上一个宝贝
         i = i - 1
-
-    # current_max_value = maxValue
-    # current_max_weight = maxWeight
-    # for i in range(len(treasureList) - 1, -1, -1):
-    #     # print(table[i])
-    #     if i > 0:
-    #         if current_max_value != table[i - 1][current_max_weight]:
-    #             choosenList.append(treasureList[i])
-    #             current_max_value = current_max_value - treasureList[i]['v']
-    #             current_max_weight = current_max_weight - treasureList[i]['w']
-    #     elif i == 0:
-    #         if treasureList[i]['w'] <= current_max_weight:
-    #             choosenList.append(treasureList[i])
-
     # 代码结束
 
-    return maxValue, choosenList
+    return maxValue, chosenList
 
 
 # 检验
