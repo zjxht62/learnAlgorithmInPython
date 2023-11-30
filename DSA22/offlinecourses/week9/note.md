@@ -246,3 +246,9 @@ print(l)
 ## 【K07】排序的课堂练习
 ![img_8.png](img_8.png)
 ![img_9.png](img_9.png)
++ 作答
+  + 1：B
+  + 2：C
+  + 3：A
+  + 4：B
+  + 5：C、A
