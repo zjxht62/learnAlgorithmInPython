@@ -38,5 +38,39 @@
 + Python自带MD5和SHA系列的散列函数库：hashlib
   + 包括了md5 / sha1 / sha224 / sha256 / sha384 / sha512等6种散列函数
 ```python
+import hashlib
+
+hashlib.md5("hello world!".encode('utf-8')).hexdigest()
+'fc3ff98e8c6a0d3087d515c0473f8677'
+
+hashlib.sha1('hello world!'.encode('utf-8')).hexdigest()
+'430ce34d020724ed75a196dfc2ad67c77772d169'
 
 ```
++ 除了对单个字符串进行散列计算之外
++ 还可以用update方法来对任意唱的数据分部分来计算
++ 这样，不管多大的数据都不会有内存不足的问题
+```python
+import hashlib
+m = hashlib.md5()
+m.update('hello world!'.encode('utf-8'))
+m.update('this is part #2'.encode('utf-8'))
+m.update('this is part #3'.encode('utf-8'))
+m.hexdigest()
+'a12edc8332947a3e02e5668c6484b93a'
+```
+## 完美散列函数用于数据一致性校验
++ 数据文件一致性判断
++ 为每个文件计算其散列值，仅对比其散列值即可得知文件内容是否相同
++ 用于网络文件下载完整性校验
++ 用于文件分享系统：网盘中相同的文件（尤其是电影）可以无需存储多次
+![img.png](img.png)
++ 加密形式保存密码
++ 仅保存密码的散列值，用户输入密码后，计算散列值并比对
++ 无需保存明文密码，即可判断用户输入了正确的密码
++ 防文件篡改：原理同数据文件一致性判断
+  + 当然还有更多密码学机制来保护数据文件
+  + 防篡改、防抵赖，是电子商务的信息技术基础
++ 彩票投注应用
+  + 彩民下注之前，机构将中奖的结果散列值公布
+  + 然后彩民投注，开奖后，彩民可以通过公布的结果和散列值对比，验证其否是否作弊
